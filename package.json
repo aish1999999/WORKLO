@@ -1,0 +1,17 @@
+{
+  "name": "@worklo/root",
+  "version": "1.0.0",
+  "description": "A comprehensive Python tool for automatically tailoring resumes to specific job descriptions using AI. The tool extracts keywords from job descriptions, generates tailored resume content, and can upload the results to Google Drive.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "private": "true",
+  "workspaces": [
+    "apps/*"
+  ]
+}
