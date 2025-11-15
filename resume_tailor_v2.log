@@ -1,0 +1,95 @@
+2025-11-12 12:08:27,927 - INFO - Google Sheets client not initialized (dry run mode)
+2025-11-12 12:08:27,927 - INFO - LLM client not initialized (dry run mode)
+2025-11-12 12:08:27,927 - INFO - Google Drive client not initialized (dry run mode)
+2025-11-12 12:08:27,927 - INFO - ResumeTailor initialized - Dry run: True, LLM: openai, Mode: V1 (15 keywords, Default)
+2025-11-12 12:08:27,927 - INFO - Processing job data...
+2025-11-12 12:08:27,927 - INFO - DRY RUN: Would process sheet 1dkxFBloNJQMnXtTfLG5CsGryK_EfmlYrdFFluWPBkgw, worksheet 'Jobs'
+2025-11-12 12:08:27,927 - WARNING - No job records to process
+2025-11-12 12:09:16,952 - INFO - Google Sheets client not initialized (dry run mode)
+2025-11-12 12:09:16,953 - INFO - LLM client not initialized (dry run mode)
+2025-11-12 12:09:16,953 - INFO - Google Drive client not initialized (dry run mode)
+2025-11-12 12:09:16,953 - INFO - ResumeTailor V2 initialized - Dry run: True, LLM: openai, Logic: 30 keywords, Experience-first
+2025-11-12 12:09:16,953 - INFO - Processing job data...
+2025-11-12 12:09:16,953 - INFO - DRY RUN: Would process sheet 1dkxFBloNJQMnXtTfLG5CsGryK_EfmlYrdFFluWPBkgw, worksheet 'Jobs'
+2025-11-12 12:09:16,953 - WARNING - No job records to process
+2025-11-12 12:33:00,128 - INFO - Google Sheets client not initialized (dry run mode)
+2025-11-12 12:33:00,129 - INFO - LLM client not initialized (dry run mode)
+2025-11-12 12:33:00,129 - INFO - Google Drive client not initialized (dry run mode)
+2025-11-12 12:33:00,129 - INFO - ResumeTailor V2 initialized - Dry run: True, LLM: openai, Logic: 30 keywords, Experience-first
+2025-11-12 12:33:00,129 - INFO - Processing job data...
+2025-11-12 12:33:00,129 - INFO - DRY RUN: Would process sheet 1dkxFBloNJQMnXtTfLG5CsGryK_EfmlYrdFFluWPBkgw, worksheet 'Jobs'
+2025-11-12 12:33:00,129 - WARNING - No job records to process
+2025-11-13 20:57:55,087 - INFO - Google Sheets client initialized with OAuth
+2025-11-13 20:57:55,170 - INFO - LLM client initialized successfully (openai)
+2025-11-13 20:58:03,613 - INFO - Received token response with no refresh_token. Consider reauthenticating with prompt='consent'.
+2025-11-13 20:58:03,614 - INFO - Successfully retrieved access token
+2025-11-13 20:58:03,629 - INFO - Google Drive client initialized with OAuth
+2025-11-13 20:58:03,630 - INFO - ResumeTailor V2 initialized - Dry run: False, LLM: openai, Logic: 30 keywords, Experience-first
+2025-11-13 20:58:03,630 - INFO - Processing job data...
+2025-11-13 20:58:04,670 - INFO - Available worksheets in spreadsheet: ['Jobs', 'Contacts', 'Old', 'Follow up', 'WORKLO', 'Manual ', 'Draft', 'Messaged Leads', 'All Leads']
+2025-11-13 20:58:04,941 - INFO - Successfully opened worksheet: 'Jobs'
+2025-11-13 20:58:05,506 - INFO - KEYWORDS column found at 12
+2025-11-13 20:58:05,506 - INFO - RESUME_LINK column found at 13
+2025-11-13 20:58:05,506 - INFO - COVER_LETTER_VERSION column found at 14
+2025-11-13 20:58:05,506 - INFO - Row 2: Using existing keywords for 'Operations Engineer, GEMS NA Ops Engineering'
+2025-11-13 20:58:05,506 - INFO - Row 3: Extracting 30 keywords for 'Manufacturing Development Engineer' (V2 logic)
+2025-11-13 20:58:17,071 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-13 20:58:17,096 - INFO - Extracted 30 keywords (V2 - comprehensive mode with 30 keywords)
+2025-11-13 20:58:17,473 - INFO - Row 3: Keywords extracted and saved
+2025-11-13 20:58:17,473 - INFO - Processed 2 job records (header row: 1)
+2025-11-13 20:58:17,474 - INFO - Skipping 'Operations Engineer, GEMS NA Ops Engineering' - Resume already exists: https://drive.google.com/file/d/1VophjakxOfUPRXUtVw8OCkBG7E5eDHHG/view
+2025-11-13 20:58:17,474 - INFO - Generating resume for: Manufacturing Development Engineer (Company: Tesla)
+2025-11-13 20:58:17,535 - INFO - Converted DOCX to structured TXT (49 lines)
+2025-11-13 20:58:17,535 - INFO - Successfully converted master template to structured TXT format
+2025-11-13 20:58:33,296 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-13 20:58:33,304 - INFO - Enhanced resume content with strong bullet points generated successfully
+2025-11-13 20:58:33,306 - INFO - Parsed AI output into sections: ['HEADER', 'EXPERIENCE', 'EDUCATION', 'PROJECTS', 'SKILLS']
+2025-11-13 20:58:33,378 - INFO - Created properly formatted resume: Aishwaryeshwar_Manickavel_tesla_manufacturing_development_engineer.docx
+2025-11-13 20:58:33,378 - INFO - Resume generated with perfect formatting: Aishwaryeshwar_Manickavel_tesla_manufacturing_development_engineer.docx
+2025-11-13 20:58:33,378 - INFO - Uploading resume to Google Drive: Aishwaryeshwar_Manickavel_tesla_manufacturing_development_engineer.docx
+2025-11-13 20:58:33,379 - INFO - Uploading to Drive folder: 157tAEUFoynamUs5ahZr-0GWC0NvsNxQK
+2025-11-13 20:58:38,787 - INFO - File uploaded to Drive with ID: 1XDQNw-XZ9BhrRHoDh2vPoVV3HZgfuS2r
+2025-11-13 20:58:38,790 - INFO - Shareable link: https://drive.google.com/file/d/1XDQNw-XZ9BhrRHoDh2vPoVV3HZgfuS2r/view
+2025-11-13 20:58:38,791 - INFO - Resume uploaded to Drive successfully: https://drive.google.com/file/d/1XDQNw-XZ9BhrRHoDh2vPoVV3HZgfuS2r/view
+2025-11-13 20:58:39,096 - INFO - Updated row 3 with resume link for 'Manufacturing Development Engineer'
+2025-11-13 20:58:39,096 - INFO - Google Sheet updated with Drive link for 'Manufacturing Development Engineer': https://drive.google.com/file/d/1XDQNw-XZ9BhrRHoDh2vPoVV3HZgfuS2r/view
+2025-11-13 20:58:39,096 - INFO - Local file cleaned up: Aishwaryeshwar_Manickavel_tesla_manufacturing_development_engineer.docx
+2025-11-13 20:58:39,096 - INFO - Generated 1 new resumes successfully
+2025-11-14 18:17:50,880 - INFO - Google Sheets client initialized with OAuth
+2025-11-14 18:17:50,952 - INFO - LLM client initialized successfully (openai)
+2025-11-14 18:17:58,408 - INFO - Received token response with no refresh_token. Consider reauthenticating with prompt='consent'.
+2025-11-14 18:17:58,409 - INFO - Successfully retrieved access token
+2025-11-14 18:17:58,417 - INFO - Google Drive client initialized with OAuth
+2025-11-14 18:17:58,418 - INFO - ResumeTailor V2 initialized - Dry run: False, LLM: openai, Logic: 30 keywords, Experience-first
+2025-11-14 18:17:58,418 - INFO - Processing job data...
+2025-11-14 18:17:59,452 - INFO - Available worksheets in spreadsheet: ['Jobs', 'Contacts', 'Old', 'Follow up', 'WORKLO', 'Manual ', 'Draft', 'Messaged Leads', 'All Leads']
+2025-11-14 18:17:59,820 - INFO - Successfully opened worksheet: 'Jobs'
+2025-11-14 18:18:00,642 - INFO - KEYWORDS column found at 12
+2025-11-14 18:18:00,643 - INFO - RESUME_LINK column found at 13
+2025-11-14 18:18:00,643 - INFO - COVER_LETTER_VERSION column found at 14
+2025-11-14 18:18:00,643 - INFO - Row 2: Using existing keywords for 'Operations Engineer, GEMS NA Ops Engineering'
+2025-11-14 18:18:00,643 - INFO - Row 3: Using existing keywords for 'Manufacturing Development Engineer'
+2025-11-14 18:18:00,643 - INFO - Row 4: Extracting 30 keywords for 'Manufacturing Engineer Supplier Quality' (V2 logic)
+2025-11-14 18:18:07,581 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-14 18:18:07,601 - INFO - Extracted 30 keywords (V2 - comprehensive mode with 30 keywords)
+2025-11-14 18:18:07,926 - INFO - Row 4: Keywords extracted and saved
+2025-11-14 18:18:07,927 - INFO - Processed 3 job records (header row: 1)
+2025-11-14 18:18:07,927 - INFO - Skipping 'Operations Engineer, GEMS NA Ops Engineering' - Resume already exists: https://drive.google.com/file/d/1VophjakxOfUPRXUtVw8OCkBG7E5eDHHG/view
+2025-11-14 18:18:07,927 - INFO - Skipping 'Manufacturing Development Engineer' - Resume already exists: https://drive.google.com/file/d/1XDQNw-XZ9BhrRHoDh2vPoVV3HZgfuS2r/view
+2025-11-14 18:18:07,927 - INFO - Generating resume for: Manufacturing Engineer Supplier Quality (Company: AMD)
+2025-11-14 18:18:07,965 - INFO - Converted DOCX to structured TXT (49 lines)
+2025-11-14 18:18:07,965 - INFO - Successfully converted master template to structured TXT format
+2025-11-14 18:18:19,952 - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-14 18:18:19,955 - INFO - Enhanced resume content with strong bullet points generated successfully
+2025-11-14 18:18:19,956 - INFO - Parsed AI output into sections: ['HEADER', 'EDUCATION', 'EXPERIENCE', 'PROJECTS', 'SKILLS']
+2025-11-14 18:18:20,008 - INFO - Created properly formatted resume: Aishwaryeshwar_Manickavel_amd_manufacturing_engineer_supplier_quality.docx
+2025-11-14 18:18:20,008 - INFO - Resume generated with perfect formatting: Aishwaryeshwar_Manickavel_amd_manufacturing_engineer_supplier_quality.docx
+2025-11-14 18:18:20,008 - INFO - Uploading resume to Google Drive: Aishwaryeshwar_Manickavel_amd_manufacturing_engineer_supplier_quality.docx
+2025-11-14 18:18:20,009 - INFO - Uploading to Drive folder: 157tAEUFoynamUs5ahZr-0GWC0NvsNxQK
+2025-11-14 18:18:24,179 - INFO - File uploaded to Drive with ID: 1FCAlnIYCkgM2tb1CX4THguvYpnV5WCH-
+2025-11-14 18:18:24,179 - INFO - Shareable link: https://drive.google.com/file/d/1FCAlnIYCkgM2tb1CX4THguvYpnV5WCH-/view
+2025-11-14 18:18:24,180 - INFO - Resume uploaded to Drive successfully: https://drive.google.com/file/d/1FCAlnIYCkgM2tb1CX4THguvYpnV5WCH-/view
+2025-11-14 18:18:24,576 - INFO - Updated row 4 with resume link for 'Manufacturing Engineer Supplier Quality'
+2025-11-14 18:18:24,577 - INFO - Google Sheet updated with Drive link for 'Manufacturing Engineer Supplier Quality': https://drive.google.com/file/d/1FCAlnIYCkgM2tb1CX4THguvYpnV5WCH-/view
+2025-11-14 18:18:24,578 - INFO - Local file cleaned up: Aishwaryeshwar_Manickavel_amd_manufacturing_engineer_supplier_quality.docx
+2025-11-14 18:18:24,579 - INFO - Generated 1 new resumes successfully
