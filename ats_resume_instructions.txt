@@ -1,0 +1,99 @@
+1. Margins
+	•	What Is: Margins not explicitly set (likely Word default 1”).
+	•	What Should Be:
+	•	Uniform 1.0” on all four sides.
+	•	Consistency is critical: no narrower than 1.0” (ATS-safe, recruiter-readable).
+
+⸻
+
+2. Header (Name & Contact Info)
+	•	What Is:
+	•	Name: “AISHWARYESHWAR MANICKAVEL” in all caps, no bold.
+	•	Contact info on one line, includes (8327752886) and full http:// LinkedIn.
+	•	What Should Be:
+	•	Name: Bold, 16 pt, Title Case (not all caps).
+	•	Contact Info: 11 pt, plain text (no parentheses, no “http://”).
+	•	Format: 832-775-2886 | ayeshwarm@gmail.com | linkedin.com/in/aishwarnick.
+
+⸻
+
+3. Section Headings
+	•	What Is:
+	•	Headings (e.g., “PROFESSIONAL EXPERIENCE”) in all caps, not bold, not underlined.
+	•	No spacing buffer above headings.
+	•	What Should Be:
+	•	Headings: Bold + Underlined, 12 pt, Left-aligned.
+	•	Spacing:
+	•	1 pt before heading.
+
+4. Professional Experience Section
+	•	What Is:
+	•	Mixed bulleting: some lines bulleted, some plain.
+	•	Company, role, and dates separated with | pipes.
+	•	Dates formatted inconsistently (May 2024 – Current vs Jan 2023 – Dec 2023 vs July 2023).
+	•	Spacing between jobs inconsistent.
+	•	What Should Be:
+	•	Each role:
+	•	Job Title (bold) — Company (regular), City, State (regular) — Dates (right aligned with tab stop).
+	•	Dates standardized: MMM YYYY – MMM YYYY.
+	•	All responsibilities in bullets, no plain text.
+	•	Spacing:
+	•	0 pt between bullets.
+	•	1 pt after last bullet before new role.
+
+5. Education Section
+	•	What Is:
+	•	Degrees listed with universities, but degrees not bold, no consistent alignment.
+	•	Dates appear at end with no right alignment.
+	•	What Should Be:
+	•	Degree (bold) — University (regular), City, State (regular) — Date (right aligned).
+	•	Consistent MMM YYYY format.
+	•	Spacing: 1 pt after section, no space between schools.
+
+6. Projects Section
+	•	What Is:
+	•	Projects listed with mixed tech-heavy content (Docker, React, .NET) + supply chain references.
+	•	Some project bullets begin with verbs, others with nouns.
+	•	Too many sub-bullets; spacing inconsistent.
+	•	What Should Be:
+	•	Project Title (bold) — Location + Date (right aligned).
+	•	2–3 concise bullets per project, action verb → method → measurable result.
+	•	Consistent 0 pt spacing between bullets; 1 pt between projects.
+
+7. Skills Section
+	•	What Is:
+	•	One long paragraph with comma-separated skills across multiple domains.
+	•	Difficult for ATS to parse categories (mix of procurement, programming, DevOps, analytics).
+	•	What Should Be:
+	•	Split into categories, listed line by line.
+	•	No paragraph formatting.
+
+8. Bullets
+	•	What Is:
+	•	Symbol is (•), but indentation inconsistent (some flush left, some hanging).
+	•	Some bullets too long (wrap into 3–4 lines).
+	•	What Should Be:
+	•	Symbol: (•) only, 0.25” hanging indent.
+	•	Max 1–2 lines per bullet.
+	•	Uniform across all sections.
+
+⸻
+
+9. Fonts
+	•	What Should Be:
+	•	Recommended ATS-safe fonts: Times New Roman.
+	•	Font sizes:
+	•	Name: 16 pt, bold.
+	•	Section Headings: 12 pt, bold + underlined.
+	•	Job Titles: 11 pt, bold.
+	•	Body Text: 10.5 pt, regular.
+
+⸻
+
+10. Section Spacing Summary (Precise)
+	•	What Is: Inconsistent (some double spacing, some no spacing).
+	•	What Should Be (precise rulebook):
+	•	Between sections (Experience → Education, etc.): 1 pt spacing after heading.
+	•	Between entries (jobs, projects, education): 1 pt after last bullet.
+	•	Between bullets within role/project: 0 pt.
+	•	Header (Name → Contact → Next Section): 1 pt before first section.

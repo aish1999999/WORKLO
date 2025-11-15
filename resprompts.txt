@@ -1,0 +1,23 @@
+**Rewrite my resume entirely from scratch** based on the job title and job description while keeping only company names, universities, and school names unchanged. The new resume should be structured, professional and ATS friendly.
+
+###Job Title:  Get it from the Google sheet
+
+###Job description: Get it from the google sheet
+
+###MyResume: Get it from the  master template
+
+### ** important instructions:**
+1. **Completely reqrite my resume ** based on the job description
+2. **DO NOT COPY** my existing resume; use it only for reference.
+3. ** Replace skills, experience, and achievements** to match the job description.
+4. **Modify projects and responsibilities based on relevant job requirements.
+5. **Update the job title** in the heading.
+6. **KEEP ONLY the company names, college and school names unchanged.
+7. **Ensure clear formatting with the following sections:**
+- Name, Description, Contact Info
+-Experience(Rewritten for relevance)
+-Education(keep only institution naames)
+-Projects (Tailored to match job)
+- Skills (Matching job description)
+8. **DO NOT include any introductions or conclusions.**
+9. Make it professional, concise, and optimized for ATS.**
