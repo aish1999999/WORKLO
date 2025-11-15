@@ -1,0 +1,21 @@
+TO DO TOMORROW
+Analyze the resume and see if 3 bullet points per role is enough or more should be added or a project section must be added to the file.
+Make sure that the first job role has the following job role and  bullet points
+Also in some resumes the company names have just been generated as company
+
+University of Houston | Operations Lead                                              Houston, TX| USA | May 2024 – Feb 2025
+•	Optimized workforce scheduling algorithms using demand forecasting and resource allocation strategies, improving staff utilization by 20% while maintaining service quality standards.
+•	Reduced operational downtime by 15% through implementation of preventive maintenance protocols and real-time equipment tracking systems, saving $8,000+ in potential revenue loss.
+•	Managed end-to-end event logistics for 25+ campus events per semester, ensuring 100% safety compliance and coordinating cross-functional teams of 15+ staff members.
+
+
+, whereas changing only the next two work experiences and  if to add projects along with it in case aligning with the description and use an if else condition for that
+Make sure the points are unique and not repetitive
+Also add a minimum of 4-5 skills  to the skills section. 
+
+
+value projects for IT/data analytical/ML,AI jobs 
+New app idea,
+
+A seperate program for IT/Data analyst/AI ML roles and a seperate one for indsutrial jobs.
+The IT/Data Analyst/ AI,ML should include projects and supply chain, Manufacturing etc should include the work experiences

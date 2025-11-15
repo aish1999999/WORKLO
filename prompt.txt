@@ -1,0 +1,692 @@
+Role: You are a senior Python automation engineer and document-formatting expert. You will write a production-ready Python script that takes my existing resume as the format master, extracts its full styling (fonts, sizes, spacing, margins, headers/footers, list styles, tables, etc.), and generates a tailored .docx resume for a given job description while keeping the exact formatting.
+
+Goal:
+Create a Python script that:
+	1.	Loads my master resume (.docx) as a style/format template.
+	2.	Parses the job description (JD) and extracts requirements/keywords.
+	3.	Rewrites or swaps content without altering any formatting (fonts, sizes, weights, alignment, line height, spacing, margins, bullets, table styles, etc.).
+	4.	Outputs a new .docx with identical formatting, but content tailored to the JD.
+
+⸻
+
+Inputs 
+	•	MASTER_RESUME_DOCX: My current resume (docx), used as the single source of truth for formatting.
+	•	JOB_DESCRIPTION_TEXT: The JD to tailor for (plain text).
+	•	(Optional) Pinned Content Rules: Sections never to delete (e.g., Education, Certifications).
+
+
+The script must preserve, clone, and reapply the following from the master resume:
+
+Document/Section level
+	•	Page size & orientation
+	•	Margins (top/bottom/left/right), gutter (if any)
+	•	Header/Footer content & distances, page numbers
+	•	Section breaks (if any), column layout (if any)
+
+Paragraph level
+	•	Font family, size, bold/italic, case, color (RGB/Theme)
+	•	Line spacing (exact/at least), line height, before/after spacing
+	•	Alignment (left/center/right/justify), indentation (left/right/first line)
+	•	Tabs/tab stops, keep-with-next/keep-lines-together if accessible
+	•	Bullets/numbering style, levels, hanging indents
+	•	Paragraph borders/shading (if any)
+
+Run (inline) level
+	•	Emphasis (bold/italic/underline), small caps, strike, superscript/subscript
+	•	Character style names and overrides
+
+Styles
+	•	Named paragraph styles (e.g., “Heading 1”, “Body”, “Bullet”, “JobTitle”)
+	•	Named character styles
+	•	List styles / numbering definitions
+	•	Table styles (borders, cell padding, header row formatting)
+
+Objects
+	•	Table grid, header row style, cell vertical alignment, banding
+	•	Icon bullets or symbol bullets (preserve or map to glyph)
+
+If python-docx cannot read a specific attribute, reuse the exact style objects from the master doc (copy paragraphs/tables as clones and replace text content inside runs) to avoid style drift.
+
+⸻
+
+Functional Requirements
+	1.	Library choices: Prefer python-docx, and if needed docxcompose / docx oxml operations to copy styles, numbering, and headers/footers accurately. Use low-level oxml where required.
+	2.	Style capture:
+	•	Auto-detect key styles by scanning the master document and building a Style Map:
+	•	styles_map = { "SectionHeader": <paragraph style>, "Subheader": <paragraph style>, "Body": <paragraph style>, "Bullet": <paragraph style>, "TableHeader": <table style>, "TableBody": <table style> }
+	•	Detect and record list/numbering definitions so bullet/number levels remain identical.
+	3.	Content model:
+	•	Parse my resume into a structured dict (sections like Summary, Skills, Experience, Projects, Education, Certifications).
+	•	Each section stores text + the original paragraph/run style references.
+	4.	JD parsing & alignment:
+	•	Extract hard requirements, “nice-to-have”, tools/tech stack, action verbs, and measurable outcomes from the JD.
+	•	Produce a keyword coverage plan and gap analysis; prioritize content swaps to maximize overlap while staying truthful.
+	•	Rewrite Summary and Skills first, then reorder/select bullets under Experience/Projects to match JD priorities.
+	•	Use concise, impact-first bullets (what/how/result, with metrics).
+	5.	Formatting-safe writing:
+	•	Never create ad-hoc styles. Reuse existing paragraph/character styles from the master.
+	•	For bullets, reuse the exact numbering/bullet definition; never switch to default Word bullets.
+	•	For tables, clone a template table from the master (if present) and only overwrite cell texts.
+	6.	Output:
+	•	Save as tailored_resume.docx (configurable).
+	•	Zero style drift: visual match must be indistinguishable from the master when content length is similar.
+	7.	CLI usage:
+	•	python tailor_resume.py --master "MASTER_RESUME_DOCX_PATH" --jd "PATH_TO_JD.txt" --out "tailored_resume.docx"
+	•	Also support --jd-text "..." for direct JD string.
+
+⸻
+
+Edge Cases & Rules
+	•	If the JD is very short, prefer minimal edits (summary + skills).
+	•	If the JD is long, prioritize top 10–15 requirements; keep resume to 1 page unless the master is already 2+.
+	•	Truncate/reflow text without breaking line spacing or alignment; respect “Keep with next” on headers.
+	•	If the master uses icon bullets (e.g., Wingdings/Font Awesome), preserve them (map code points).
+	•	If a section doesn’t exist in master, do not invent new section styles; use the closest existing.
+	•	Never change margins, fonts, or sizes. Content only.
+
+⸻
+
+Deliverables
+
+Provide:
+	1.	tailor_resume.py — complete, commented script with functions:
+	•	load_master_doc(path)
+	•	build_style_map(doc)
+	•	parse_master_structure(doc)
+	•	extract_jd_requirements(jd_text)
+	•	align_content(master_struct, jd_requirements)
+	•	render_tailored_doc(master_doc, style_map, aligned_content, out_path)
+	•	main() with argparse
+	2.	README snippet (in code comments) explaining usage & assumptions.
+	3.	Minimal test block inside if __name__ == "__main__": that runs on sample inputs.
+
+⸻
+
+Implementation Details (Be Explicit)
+	•	Use python-docx APIs: Document, doc.styles, paragraph.style, run.font.name/size/bold/italic, paragraph.paragraph_format.line_spacing, space_before/after, alignment, left_indent, first_line_indent.
+	•	Preserve numbering with numPr cloning via oxml if needed; maintain list levels.
+	•	To avoid style loss, for templated paragraphs: duplicate the original paragraph XML, clear text in runs, and insert new text preserving run properties.
+	•	For tables: duplicate a template table node; replace only w:t text nodes.
+	•	Preserve headers/footers: copy sections[i].header/footer parts if creating a new doc; or edit in place in a cloned copy of the master.
+	•	Keep page count stable where possible; prefer concise edits over new lines.
+	•	Add a safety switch --strict-format to abort if an unrecognized style is required.
+
+⸻
+
+Output Format
+
+Return only the Python code in one block (no extra commentary) that:
+	•	Is directly runnable (imports, argparse, main).
+	•	Saves the tailored resume to --out.
+	•	Prints a brief coverage report (matched JD keywords).
+
+⸻
+
+Placeholders to Fill Before Running
+	•	MASTER_RESUME_DOCX_PATH = "<<PATH_TO_MY_MASTER_RESUME.docx>>"
+	•	JOB_DESCRIPTION_TEXT = """<<PASTE JD HERE>>"""
+
+⸻
+
+Example Content Rules (Keep Them in Code as Defaults)
+	•	Bullet rewriting template: Action verb + domain + method/tool + measurable impact (%).
+	•	Prefer my existing achievements; reorder/select to fit JD; don’t fabricate.
+	•	Keep section order the same as master unless JD strongly suggests swapping Skills and Experience.
+
+⸻
+
+Verification
+
+At the end of the script, include a quick visual verification note:
+	•	“Open both docs side by side; confirm fonts, sizes, margins, bullets, spacing, headers/footers, and table styles are identical.”
+
+⸻
+
+#Formatting_instructions
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+tailor_resume.py
+
+Standalone, production-ready Python script for Cursor that:
+  1) Loads a master resume (.docx) as the single source of formatting truth.
+  2) Optionally consumes a JSON formatting spec (page/margins/fonts/spacing) to enforce defaults.
+  3) Parses a job description (JD) and extracts weighted requirements/keywords (rule-based, no APIs).
+  4) Rewrites ONLY content (summary/skills ordering and experience/project bullet prioritization)
+     while preserving original visual formatting (styles, bullets, spacing, margins, headers/footers).
+  5) Outputs a tailored .docx with identical formatting.
+
+No external model prompts are referenced or required. This script is fully self-contained.
+
+USAGE
+------
+python tailor_resume.py \
+  --master "<<PATH_TO_MY_MASTER_RESUME.docx>>" \
+  --jd "<<PATH_TO_JD.txt>>" \
+  --out "tailored_resume.docx" \
+  [--spec "<<PATH_TO_OPTIONAL_JSON_SPEC>>"] \
+  [--strict-format]
+
+OPTIONAL INPUTS
+---------------
+--spec: JSON produced by a format audit (e.g., resume_format_spec.json)
+--strict-format: aborts if script would introduce unknown styles or default bullets.
+
+SECTIONS HANDLED
+----------------
+- SUMMARY            (rewritten: 1–2 concise, JD-aligned lines)
+- TECHNICAL SKILLS   (reordered: JD-priority first; content preserved)
+- EXPERIENCE         (reordered bullets per JD; companies remain unchanged)
+- PROJECTS           (reordered bullets per JD)
+- EDUCATION          (unchanged except light reflow if needed)
+
+IMPLEMENTATION NOTES
+--------------------
+- Uses python-docx with low-level oxml cloning of paragraph nodes (numPr, indents, run properties).
+- No ad-hoc style creation. Reuses master document styles and numbering.
+- Bullets and hanging indents preserved by duplicating reference paragraphs and replacing only text nodes.
+- JD parsing is deterministic (regex + token scoring); no network calls.
+
+VERIFICATION
+------------
+Open master and tailored .docx side-by-side; confirm fonts, sizes, margins, bullets/numbering,
+line spacing, headers/footers, and table styles are visually identical.
+
+"""
+
+import argparse
+import json
+import re
+from collections import Counter, defaultdict
+from copy import deepcopy
+from pathlib import Path
+
+from docx import Document
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.shared import Pt, Inches
+
+# ----------------------------
+# Stopwords & token utilities (deterministic, no external deps)
+# ----------------------------
+
+_STOPWORDS = {
+    "a","an","the","and","or","of","for","to","with","in","on","at","by","from","as","is","are","were","be","been","being",
+    "this","that","those","these","it","its","into","about","across","over","under","between","per","via","using","use","used",
+    "you","your","we","our","they","their","i","me","my","mine","their","them"
+}
+
+_TOKEN_RE = re.compile(r"[A-Za-z0-9\.\+#\-_/]+")
+
+def tokenize(text: str):
+    return _TOKEN_RE.findall(text.lower())
+
+def extract_keywords_rule_based(jd_text: str, top_k: int = 50):
+    toks = [t for t in tokenize(jd_text) if len(t) > 2 and t not in _STOPWORDS]
+    # Keep multi-word n-grams in a simple pass (2–4 tokens) by frequency over raw text
+    words = toks
+    bigrams = re.findall(r"(?i)\b([a-z0-9\.\+#\-_/]+)\s+([a-z0-9\.\+#\-_/]+)\b", jd_text)
+    trigrams = re.findall(r"(?i)\b([a-z0-9\.\+#\-_/]+)\s+([a-z0-9\.\+#\-_/]+)\s+([a-z0-9\.\+#\-_/]+)\b", jd_text)
+
+    bi_join = [" ".join(map(str.lower, b)) for b in bigrams]
+    tri_join = [" ".join(map(str.lower, t)) for t in trigrams]
+
+    # Frequency scoring with light upweighting for n-grams
+    freq = Counter(words)
+    for bg in bi_join:
+        if any(w in _STOPWORDS or len(w) <= 2 for w in bg.split()):
+            continue
+        freq[bg] += 2
+    for tg in tri_join:
+        if any(w in _STOPWORDS or len(w) <= 2 for w in tg.split()):
+            continue
+        freq[tg] += 3
+
+    ranked = [w for w, _ in freq.most_common(top_k)]
+    # De-duplicate keeping order, prioritize longer n-grams first
+    seen = set()
+    ordered = []
+    for term in sorted(ranked, key=lambda x: (-len(x.split()), -len(x), ranked.index(x))):
+        if term not in seen:
+            seen.add(term)
+            ordered.append(term)
+    return ordered[:top_k]
+
+# ----------------------------
+# Spec application (optional)
+# ----------------------------
+
+def load_spec(spec_path: str | None):
+    if not spec_path:
+        return {}
+    with open(spec_path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+def enforce_page_setup(doc: Document, spec: dict):
+    page = spec.get("page", {})
+    if not page:
+        return
+    sec = doc.sections[0]
+    w = page.get("page_width_inches")
+    h = page.get("page_height_inches")
+    if isinstance(w, (int, float)) and isinstance(h, (int, float)):
+        sec.page_width = Inches(w)
+        sec.page_height = Inches(h)
+
+    m = page.get("margins_inches") or {}
+    if "top" in m:    sec.top_margin = Inches(m["top"])
+    if "bottom" in m: sec.bottom_margin = Inches(m["bottom"])
+    if "left" in m:   sec.left_margin = Inches(m["left"])
+    if "right" in m:  sec.right_margin = Inches(m["right"])
+    if "header" in m: sec.header_distance = Inches(m["header"])
+    if "footer" in m: sec.footer_distance = Inches(m["footer"])
+    if "gutter" in m and hasattr(sec, "gutter"):
+        try:
+            sec.gutter = Inches(m["gutter"])
+        except Exception:
+            pass
+
+def dominant_alignment_value(name: str):
+    return {
+        "left": WD_ALIGN_PARAGRAPH.LEFT,
+        "center": WD_ALIGN_PARAGRAPH.CENTER,
+        "right": WD_ALIGN_PARAGRAPH.RIGHT,
+        "justify": WD_ALIGN_PARAGRAPH.JUSTIFY,
+        "distribute": WD_ALIGN_PARAGRAPH.DISTRIBUTE,
+        "thai_justify": WD_ALIGN_PARAGRAPH.THAI_JUSTIFY,
+    }.get((name or "left").lower(), WD_ALIGN_PARAGRAPH.LEFT)
+
+def apply_paragraph_default(p, defaults: dict):
+    # Alignment
+    if "dominant_alignment" in defaults:
+        p.alignment = dominant_alignment_value(defaults["dominant_alignment"])
+    # Spacing after
+    sa = defaults.get("typical_space_after_pt")
+    if isinstance(sa, (int, float)):
+        p.paragraph_format.space_after = Pt(sa)
+
+def apply_run_default(run, defaults: dict):
+    fn = defaults.get("dominant_font_name")
+    fs = defaults.get("dominant_font_size_pt")
+    if fn:
+        run.font.name = fn
+    if isinstance(fs, (int, float)):
+        run.font.size = Pt(fs)
+
+# ----------------------------
+# Style discovery & structure parsing
+# ----------------------------
+
+def is_all_caps_header(p_text: str):
+    t = (p_text or "").strip()
+    return t.isupper() and 0 < len(t) <= 48
+
+def build_style_map(doc: Document):
+    """
+    Heuristics to find representative paragraphs for:
+      - section header
+      - bullet/body
+    Returns anchors we can clone to preserve bullets/indents/numPr exactly.
+    """
+    anchors = {"SectionHeader": None, "Bullet": None, "Body": None}
+    for p in doc.paragraphs:
+        t = (p.text or "").strip()
+        if not anchors["SectionHeader"] and is_all_caps_header(t):
+            anchors["SectionHeader"] = p
+        # Bullet detection by numbering properties or a leading glyph
+        if not anchors["Bullet"]:
+            if _has_numbering(p) or t.startswith("•") or t.startswith("- "):
+                anchors["Bullet"] = p
+        if not anchors["Body"] and t and not is_all_caps_header(t) and not _has_numbering(p):
+            anchors["Body"] = p
+        if all(anchors.values()):
+            break
+    return anchors
+
+def _has_numbering(p):
+    # Low-level check: presence of numPr in the paragraph properties
+    pPr = getattr(p._element, "pPr", None)
+    if pPr is None:
+        # try find
+        for child in p._element.iter():
+            if child.tag.endswith('numPr'):
+                return True
+        return False
+    for child in pPr.iter():
+        if child.tag.endswith('numPr'):
+            return True
+    return False
+
+def locate_sections(doc: Document):
+    """
+    Returns an ordered list of tuples: [(header_paragraph, [body_paragraphs...]), ...]
+    Sections are delimited by ALL-CAPS headings.
+    """
+    sections = []
+    current_header = None
+    current_body = []
+
+    for p in doc.paragraphs:
+        t = (p.text or "").strip()
+        if is_all_caps_header(t):
+            if current_header:
+                sections.append((current_header, current_body))
+            current_header = p
+            current_body = []
+        else:
+            if current_header:
+                current_body.append(p)
+
+    if current_header:
+        sections.append((current_header, current_body))
+    return sections
+
+def section_index_by_title(sections, title: str):
+    tl = title.strip().upper()
+    for i, (hdr, _) in enumerate(sections):
+        if (hdr.text or "").strip().upper() == tl:
+            return i
+    return -1
+
+# ----------------------------
+# JD alignment & content shaping (deterministic)
+# ----------------------------
+
+def score_text_against_terms(text: str, terms: list[str]) -> int:
+    if not text:
+        return 0
+    low = text.lower()
+    score = 0
+    for t in terms:
+        if not t:
+            continue
+        if " " in t:
+            if t in low:
+                score += 2
+        else:
+            if re.search(rf"\b{re.escape(t)}\b", low):
+                score += 1
+    return score
+
+def reorder_lines_by_keywords(lines: list[str], terms: list[str]):
+    # Stable sort by descending match score; keep original order among ties
+    scored = [(ln, score_text_against_terms(ln, terms), idx) for idx, ln in enumerate(lines)]
+    scored.sort(key=lambda x: (-x[1], x[2]))
+    return [s[0] for s in scored]
+
+def craft_summary_lines(terms: list[str], max_lines: int = 2):
+    # Create concise, ATS-safe lines using prominent terms (no hallucinated metrics)
+    focus = [t for t in terms if len(t) > 2][:8]
+    parts = ", ".join(focus[:4]) if focus else "priority requirements"
+    l1 = f"Results-driven engineer aligning to {parts}."
+    l2 = "Delivers impact via analytics, lean execution, and quality rigor."
+    return [l1, l2][:max_lines]
+
+# ----------------------------
+# Low-level paragraph cloning & safe text replacement
+# ----------------------------
+
+def clone_par_after(ref_paragraph):
+    """
+    Clone the entire paragraph XML (including numPr/list formatting) and insert after ref.
+    Returns the new docx Paragraph.
+    """
+    ref_el = ref_paragraph._element
+    new_el = deepcopy(ref_el)
+    ref_el.addnext(new_el)
+
+    from docx.text.paragraph import Paragraph
+    return Paragraph(new_el, ref_paragraph._parent)
+
+def clear_runs_text(paragraph):
+    for r in paragraph.runs:
+        r.text = ""
+
+def set_paragraph_text_preserve_runs(paragraph, text: str):
+    # If paragraph has no runs, add one; else fill first run and strip others
+    if not paragraph.runs:
+        run = paragraph.add_run(text)
+        return
+    # Put full text into the first run; clear others (keeps formatting)
+    paragraph.runs[0].text = text
+    for r in paragraph.runs[1:]:
+        r.text = ""
+
+def delete_paragraph(paragraph):
+    p = paragraph._element
+    p.getparent().remove(p)
+
+# ----------------------------
+# Rendering workflow
+# ----------------------------
+
+def render_tailored_doc(master_doc: Document,
+                        spec: dict,
+                        jd_terms: list[str],
+                        strict_format: bool) -> Document:
+    """
+    Mutates a COPY of the master document object and returns it.
+    """
+    # Enforce page defaults if provided
+    if spec:
+        enforce_page_setup(master_doc, spec)
+    defaults = spec.get("defaults", {}) if spec else {}
+
+    # Discover sections
+    sections = locate_sections(master_doc)
+
+    # Style anchors
+    anchors = build_style_map(master_doc)
+    bullet_anchor = anchors.get("Bullet")
+    body_anchor = anchors.get("Body")
+
+    if strict_format and not (bullet_anchor and body_anchor):
+        raise RuntimeError("Strict mode: Missing bullet/body anchors to preserve formatting.")
+
+    # Helper to (re)write a section with cloned formatting
+    def rewrite_section_lines(header_title: str, new_lines: list[str]):
+        idx = section_index_by_title(sections, header_title)
+        if idx < 0:
+            return  # section not present; no-op
+        hdr, body = sections[idx]
+        # Remove existing body paragraphs for a clean slate
+        for p in body:
+            delete_paragraph(p)
+
+        # Choose an anchor: bullet if original first body had bullets, otherwise body
+        # If no original body, default to body anchor or header clone
+        anchor_ref = bullet_anchor if (body and _has_numbering(body[0])) else (body[0] if body else body_anchor or hdr)
+
+        # Insert lines using cloned paragraphs to preserve numbering/indents
+        last = hdr
+        for i, line in enumerate(new_lines):
+            new_p = clone_par_after(last if i == 0 else last)
+            clear_runs_text(new_p)
+            set_paragraph_text_preserve_runs(new_p, line)
+            apply_paragraph_default(new_p, defaults)
+            for run in new_p.runs:
+                apply_run_default(run, defaults)
+            last = new_p
+
+    # SUMMARY: craft 1–2 lines
+    summary_lines = craft_summary_lines(jd_terms, max_lines=2)
+    rewrite_section_lines("SUMMARY", summary_lines)
+
+    # TECHNICAL SKILLS: reorder lines by JD terms (keep content, prioritize matches)
+    skills_idx = section_index_by_title(sections, "TECHNICAL SKILLS")
+    if skills_idx >= 0:
+        _, body = sections[skills_idx]
+        skill_lines = [p.text.strip() for p in body if p.text.strip()]
+        if skill_lines:
+            reordered = reorder_lines_by_keywords(skill_lines, jd_terms)
+            rewrite_section_lines("TECHNICAL SKILLS", reordered)
+
+    # EXPERIENCE: within each role block, reorder bullets by JD terms (preserve companies)
+    exp_idx = section_index_by_title(sections, "PROFESSIONAL EXPERIENCE")
+    if exp_idx >= 0:
+        hdr, body = sections[exp_idx]
+
+        # Split body into blocks separated by blank lines or ALL-CAPS segment headers (rare)
+        blocks = []
+        current_block = []
+        for p in body:
+            txt = (p.text or "").strip()
+            if not txt:
+                if current_block:
+                    blocks.append(current_block)
+                    current_block = []
+                continue
+            if is_all_caps_header(txt):
+                # treat as delimiter
+                if current_block:
+                    blocks.append(current_block)
+                current_block = [p]
+            else:
+                current_block.append(p)
+        if current_block:
+            blocks.append(current_block)
+
+        # Remove existing body
+        for p in body:
+            delete_paragraph(p)
+
+        # Re-add blocks with bullet reordering
+        last = hdr
+        for block in blocks:
+            # Render block paragraphs in original order, but reorder bullet paragraphs within
+            # Identify bullets vs non-bullets
+            bullets = [p for p in block if _has_numbering(p) or p.text.strip().startswith(("•", "- "))]
+            non_bullets = [p for p in block if p not in bullets]
+
+            # Clone non-bullets first (e.g., company/title line)
+            for p in non_bullets:
+                new_p = clone_par_after(last)
+                clear_runs_text(new_p)
+                set_paragraph_text_preserve_runs(new_p, p.text)
+                # Copy alignment/spacing defaults (keeps visual parity)
+                apply_paragraph_default(new_p, defaults)
+                for run in new_p.runs:
+                    apply_run_default(run, defaults)
+                last = new_p
+
+            # Reorder bullet texts by JD terms
+            bullet_lines = [p.text.strip() for p in bullets]
+            reordered_bullets = reorder_lines_by_keywords(bullet_lines, jd_terms)
+
+            # Re-emit bullets by cloning a known bullet anchor (if available) else clone original bullets
+            bullet_ref = bullets[0] if bullets else (bullet_anchor or last)
+            for line in reordered_bullets:
+                new_b = clone_par_after(last if last is not None else hdr)
+                # Replace run texts
+                clear_runs_text(new_b)
+                set_paragraph_text_preserve_runs(new_b, line)
+                apply_paragraph_default(new_b, defaults)
+                for run in new_b.runs:
+                    apply_run_default(run, defaults)
+                last = new_b
+
+    # PROJECTS: similar bullet reordering if section exists
+    proj_idx = section_index_by_title(sections, "PROJECTS")
+    if proj_idx >= 0:
+        hdr, body = sections[proj_idx]
+        # naive grouping by blank lines
+        groups = []
+        cur = []
+        for p in body:
+            if (p.text or "").strip():
+                cur.append(p)
+            else:
+                if cur:
+                    groups.append(cur)
+                    cur = []
+        if cur:
+            groups.append(cur)
+
+        # Clear old
+        for p in body:
+            delete_paragraph(p)
+
+        last = hdr
+        for g in groups:
+            bullets = [p for p in g if _has_numbering(p) or p.text.strip().startswith(("•", "- "))]
+            non_bullets = [p for p in g if p not in bullets]
+
+            for p in non_bullets:
+                new_p = clone_par_after(last)
+                clear_runs_text(new_p)
+                set_paragraph_text_preserve_runs(new_p, p.text)
+                apply_paragraph_default(new_p, defaults)
+                for run in new_p.runs:
+                    apply_run_default(run, defaults)
+                last = new_p
+
+            if bullets:
+                lines = [p.text.strip() for p in bullets]
+                reordered = reorder_lines_by_keywords(lines, jd_terms)
+                for line in reordered:
+                    new_b = clone_par_after(last)
+                    clear_runs_text(new_b)
+                    set_paragraph_text_preserve_runs(new_b, line)
+                    apply_paragraph_default(new_b, defaults)
+                    for run in new_b.runs:
+                        apply_run_default(run, defaults)
+                    last = new_b
+
+    return master_doc
+
+# ----------------------------
+# Coverage reporting (console-only)
+# ----------------------------
+
+def coverage_report(doc: Document, jd_terms: list[str], top_n: int = 15):
+    full_text = "\n".join((p.text or "") for p in doc.paragraphs).lower()
+    top = jd_terms[:top_n]
+    used = []
+    unused = []
+    for t in top:
+        found = (t in full_text) if " " in t else bool(re.search(rf"\b{re.escape(t)}\b", full_text))
+        (used if found else unused).append(t)
+    return {"top_checked": top, "used": used, "unused": unused}
+
+# ----------------------------
+# Orchestration (CLI)
+# ----------------------------
+
+def main():
+    ap = argparse.ArgumentParser(description="Tailor a resume .docx to a JD while preserving formatting.")
+    ap.add_argument("--master", required=True, help="Path to master resume .docx")
+    ap.add_argument("--jd", required=True, help="Path to job description .txt")
+    ap.add_argument("--out", required=True, help="Path to output tailored .docx")
+    ap.add_argument("--spec", required=False, help="Optional JSON spec to enforce page/font defaults")
+    ap.add_argument("--strict-format", action="store_true", help="Abort if bullet/body anchors are missing")
+    args = ap.parse_args()
+
+    master_path = Path(args.master)
+    jd_path = Path(args.jd)
+    out_path = Path(args.out)
+    spec = load_spec(args.spec) if args.spec else {}
+
+    if not master_path.exists():
+        raise FileNotFoundError(f"Master resume not found: {master_path}")
+    if not jd_path.exists():
+        raise FileNotFoundError(f"JD file not found: {jd_path}")
+
+    jd_text = jd_path.read_text(encoding="utf-8", errors="ignore")
+    jd_terms = extract_keywords_rule_based(jd_text, top_k=50)
+
+    # Load and clone master document (edit in place on a new Document object)
+    doc = Document(str(master_path))
+
+    tailored = render_tailored_doc(doc, spec, jd_terms, strict_format=args.strict_format)
+    tailored.save(str(out_path))
+
+    # Print a concise coverage report
+    report = coverage_report(tailored, jd_terms, top_n=15)
+    print(json.dumps({
+        "output": str(out_path),
+        "coverage": report
+    }, indent=2))
+
+if __name__ == "__main__":
+    main()
